@@ -23,7 +23,7 @@ var blockIt = {
 
   paceIt: function (arr, func, perSecond) {
     var interval = 1000 / perSecond;
-    return this.throttleIt(arr, func, interval);
+    return blockIt.throttleIt(arr, func, interval);
   }
 };
 

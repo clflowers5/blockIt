@@ -1,5 +1,7 @@
 let rp = require('request-promise');
-let blockIt = require('./blockIt');
+let blockIt = require('./blockIt').blockIt;
+let throttleIt = require('./blockIt').throttleIt;
+let paceIt = require('./blockIt').paceIt;
 
 let urlArray = [
 	'http://www.google.com',
@@ -26,8 +28,8 @@ function getUrl(url) {
 	});
 }
 
-// blockIt.blockArray(urlArray, getUrl);
+// blockIt(urlArray, getUrl);
 
-// blockIt.throttleIt(urlArray, getUrl, 5000);
+// throttleIt(urlArray, getUrl, 5000);
 
-blockIt.paceIt(urlArray, getUrl, 5);
+paceIt(urlArray, getUrl, 1);
