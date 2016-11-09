@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-var blockIt = {
-  blockIt: function (arr, func) {
+module.exports = {
+  blockIt: function (func, arr) {
     return arr.reduce(function (promise, item) {
       return promise.then(function () {
         return func(item);
@@ -9,7 +9,7 @@ var blockIt = {
     }, Promise.resolve());
   },
 
-  throttleIt: function (arr, func, interval) {
+  stallIt: function (func, arr, interval) {
     var current = 0;
     return arr.reduce(function (promise, item) {
       (function (item) {
@@ -21,10 +21,8 @@ var blockIt = {
     });
   },
 
-  paceIt: function (arr, func, perSecond) {
+  paceIt: function (func, arr, perSecond) {
     var interval = 1000 / perSecond;
-    return blockIt.throttleIt(arr, func, interval);
+    return module.exports.stallIt(func, arr, interval);
   }
 };
-
-module.exports = blockIt;
