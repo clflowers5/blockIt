@@ -4,7 +4,7 @@ module.exports = {
   blockIt: function (func, arr) {
     return new Promise(function (resolve) {
       var result = [];
-      var current = 0;
+      var complete = 0;
       var len = arr.length;
 
       arr.reduce(function (promise, item) {
@@ -12,7 +12,7 @@ module.exports = {
           return func(item)
             .then(function (data) {
               result.push(data);
-              if (++current === len) resolve(result);
+              if (++complete === len) resolve(result);
             });
         });
       }, Promise.resolve());
@@ -22,7 +22,7 @@ module.exports = {
   stallIt: function (func, arr, interval) {
     return new Promise(function (resolve) {
       var result = [];
-      var current = 0;
+      var complete = 0;
       var stall = 0;
       var len = arr.length;
 
@@ -32,7 +32,7 @@ module.exports = {
             func(item)
               .then(function (data) {
                 result.push(data);
-                if (++current === len) resolve(result);
+                if (++complete === len) resolve(result);
               });
           }, interval * stall);
           ++stall;
