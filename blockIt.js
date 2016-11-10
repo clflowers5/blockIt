@@ -23,10 +23,9 @@ module.exports = {
     return new Promise(function (resolve) {
       var result = [];
       var complete = 0;
-      var stall = 0;
       var len = arr.length;
 
-      arr.map(function (item) {
+      arr.map(function (item, index) {
         (function (item) {
           setTimeout(function () {
             func(item)
@@ -34,8 +33,7 @@ module.exports = {
                 result.push(data);
                 if (++complete === len) resolve(result);
               });
-          }, interval * stall);
-          ++stall;
+          }, interval * index);
         })(item);
       });
     });
