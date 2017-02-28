@@ -3,9 +3,9 @@
 module.exports = {
   blockIt: function (func, arr) {
     return new Promise(function (resolve) {
-      var result = [];
-      var complete = 0;
-      var len = arr.length;
+      let result = [];
+      let complete = 0;
+      let len = arr.length;
 
       arr.reduce(function (promise, item) {
         return promise.then(function () {
@@ -21,9 +21,9 @@ module.exports = {
 
   stallIt: function (func, arr, interval) {
     return new Promise(function (resolve) {
-      var result = [];
-      var complete = 0;
-      var len = arr.length;
+      let result = [];
+      let complete = 0;
+      let len = arr.length;
 
       arr.map(function (item, index) {
         (function (item) {
@@ -40,7 +40,7 @@ module.exports = {
   },
 
   paceIt: function (func, arr, perSecond) {
-    var interval = 1000 / perSecond;
+    let interval = 1000 / perSecond;
     return new Promise(function (resolve) {
       module.exports.stallIt(func, arr, interval)
         .then(function (result) {
