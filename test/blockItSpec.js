@@ -5,7 +5,7 @@ const blockIt = require('../blockIt').blockIt;
 const stallIt = require('../blockIt').stallIt;
 const paceIt = require('../blockIt').paceIt;
 
-const testArr = [...Array(500).keys()];
+const testArr = [...new Array(500).keys()];
 
 function arraysAreEqual(arr1, arr2) {
   let equalLength = arr1.length === arr2.length;
