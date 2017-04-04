@@ -6,6 +6,9 @@ or fragile API, you need some throttling not offered out of the box by Promises.
 BlockIt offers ways of throttling Promises, either through executing your tasks 1 by 1 blocking style or
 setting a timeout in between execution of tasks.
 
+All functions return a ```Promise```, and results are stored in an array
+that is resolved when all array items have been passed to the callback.
+
 ## Usage
 
 #### Import
