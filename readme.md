@@ -9,6 +9,10 @@ setting a timeout in between execution of tasks.
 All functions return a ```Promise```, and results are stored in an array
 that is resolved when all array items have been passed to the callback.
 
+```blockIt``` guarantees order of results in the resolved array will
+correspond to the provided input array, while ```stallIt``` and ```paceIt```
+append to the array as their Promises resolve.
+
 ## Usage
 
 #### Import
