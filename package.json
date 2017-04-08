@@ -1,7 +1,7 @@
 {
   "name": "blockit",
   "version": "0.1.0",
-  "description": "",
+  "description": "Provides functions to manage Promise execution. Provides blocking, stalling, and pacing execution of a callback function to an array of elements",
   "main": "blockIt.js",
   "scripts": {
     "test": "node test/blockItSpec.js"
