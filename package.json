@@ -15,5 +15,13 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/clflowers5/blockIt.git"
-  }
+  },
+  "keywords": [
+    "promise",
+    "block",
+    "blocking",
+    "stall",
+    "blocking promise",
+    "async"
+  ]
 }
