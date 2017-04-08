@@ -1,6 +1,6 @@
 {
   "name": "blockit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Provides functions to manage Promise execution. Provides blocking, stalling, and pacing execution of a callback function to an array of elements",
   "main": "blockIt.js",
   "scripts": {
