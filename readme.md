@@ -1,6 +1,6 @@
 # BlockIt
 
-Promises are a great addition to Javascript, but if you're creating a lot of requests to a rate limited 
+Promises are a great addition to JavaScript, but if you're creating a lot of requests to a rate limited 
 or fragile API, you need some throttling not offered out of the box by Promises. 
 
 BlockIt offers ways of throttling Promises, either through executing your tasks 1 by 1 blocking style or
@@ -17,9 +17,9 @@ append to the array as their Promises resolve.
 
 #### Import
 ```javascript
-const blockIt = require('../blockIt').blockIt;
-const stallIt = require('../blockIt').stallIt;
-const paceIt = require('../blockIt').paceIt;
+const blockIt = require('blockIt').blockIt;
+const stallIt = require('blockIt').stallIt;
+const paceIt = require('blockIt').paceIt;
 ```
 
 #### blockIt
@@ -36,8 +36,7 @@ blockIt(awesomeFunction, awesomeArr)
 ```
 
 #### stallIt
-A provided interval is used as a wait time in-between function
-executions.
+A provided interval is used as a buffer between function executions.
 ```javascript
 // Pass the next array item into the function every half-second
 stallIt(awesomeFunction, awesomeArr, 500)
@@ -47,7 +46,7 @@ stallIt(awesomeFunction, awesomeArr, 500)
 ```
 
 #### paceIt
-Similar to ```stallIt```, but instead of an interval pass in
+Similar to ```stallIt```, but instead of an interval, pass in
 the desired amount of executions to allow per second. Useful for
 rate limited API's.
 ```javascript
