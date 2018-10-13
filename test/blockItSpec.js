@@ -7,43 +7,47 @@ const paceIt = require('../blockIt').paceIt;
 
 const testArr = [...new Array(300).keys()];
 
-test('blockIt performs synchronously', function (next) {
-
-  blockIt(testFunc, testArr)
+test('blockIt performs in order with Promises', function (next) {
+  blockIt(testFuncPromiseReturn, testArr)
     .then(function (result) {
-      ok(arraysAreEqual(result, testArr), 'Tasks are performed in order and block until resolved.');
+      ok(arraysAreEqual(result, testArr), 'Promises are performed in order and block until resolved.');
       next();
     });
+}, true);
 
+test('blockIt performs with non-Promises', function (next) {
+  blockIt(testFuncNonPromiseReturn, testArr)
+    .then(function (result) {
+      ok(arraysAreEqual(result, testArr), 'Functions are performed in order.');
+      next();
+    });
 }, true);
 
 test('stallIt stalls', function (next) {
-
-  stallIt(testFunc, testArr, 5)
+  stallIt(testFuncPromiseReturn, testArr, 5)
     .then(function (result) {
       ok(arraysAreEqualLength(result, testArr), 'Each task is stalled the provided amount.');
       next();
     });
-
 }, true);
 
 test('paceIt paces', function (next) {
-
-  paceIt(testFunc, testArr, 100)
+  paceIt(testFuncPromiseReturn, testArr, 50)
     .then(function (result) {
       ok(arraysAreEqualLength(result, testArr), 'Tasks are paced at the provided amount.');
       next();
     })
-
 }, true);
 
-
-
 // Random timeout to simulate a poor man's async process
-function testFunc(index) {
+function testFuncPromiseReturn(index) {
   return new Promise(function (resolve) {
-    setTimeout(() => resolve(index), Math.random() * 11);
+    setTimeout(() => resolve(index), Math.random() * 10);
   });
+}
+
+function testFuncNonPromiseReturn(index) {
+  return index;
 }
 
 function arraysAreEqualLength(arr1, arr2) {
@@ -55,5 +59,15 @@ function arraysAreEqualContents(arr1, arr2) {
 }
 
 function arraysAreEqual(arr1, arr2) {
-  return arraysAreEqualLength(arr1, arr2) && arraysAreEqualContents(arr1, arr2);
+  if (!arraysAreEqualLength(arr1, arr2)) {
+    console.error('Arrays are not equal length.');
+    return false;
+  }
+
+  if (!arraysAreEqualContents(arr1, arr2)) {
+    console.error('Arrays are not equal contents.');
+    return false;
+  }
+
+  return true;
 }

@@ -26,7 +26,7 @@ const paceIt = require('blockIt').paceIt;
 Each array item is passed into awesomeFunction synchronously,
 the next item doesn't execute until the previous resolves.
 ```javascript
-const awesomeFunction = () => Promise.resolve();
+const awesomeFunction = (arrayItem) => Promise.resolve(`${arrayItem} is awesome!`);
 const awesomeArr = ['first', 'second'];
 
 blockIt(awesomeFunction, awesomeArr)
@@ -47,7 +47,7 @@ stallIt(awesomeFunction, awesomeArr, 500)
 
 #### paceIt
 Similar to ```stallIt```, but instead of an interval, pass in
-the desired amount of executions to allow per second. Useful for
+the desired amount of executions to allow per second. Use100ful for
 rate limited API's.
 ```javascript
 // perform 20 awesomeFunctions a second
@@ -56,3 +56,10 @@ paceIt(awesomeFunction, awesomeArr, 20)
         // Fickle API limits? Have no fear!
     });
 ```
+### TODO:
+* handle errors that occur within callback invocation
+* add tests for time delays in stallIt and paceIt
+* bring in babel safe transpilation
+* setup proper 'main' for package.json (after babel)
+* super simple eslint config.
+* replace klud for testing?
