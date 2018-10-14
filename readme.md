@@ -47,7 +47,7 @@ stallIt(awesomeFunction, awesomeArr, 500)
 
 #### paceIt
 Similar to ```stallIt```, but instead of an interval, pass in
-the desired amount of executions to allow per second. Use100ful for
+the desired amount of executions to allow per second. Useful for
 rate limited API's.
 ```javascript
 // perform 20 awesomeFunctions a second
@@ -58,7 +58,7 @@ paceIt(awesomeFunction, awesomeArr, 20)
 ```
 ### TODO:
 * handle errors that occur within callback invocation
-* add tests for time delays in stallIt and paceIt
+* add tests for time delays in stallIt and paceIt - in progress
 * bring in babel safe transpilation
 * setup proper 'main' for package.json (after babel)
 * super simple eslint config.

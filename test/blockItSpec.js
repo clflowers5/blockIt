@@ -1,6 +1,8 @@
 'use strict';
 
 const test = require('kludjs');
+const arraysAreEqual = require('./testHelpers').arraysAreEqual;
+const arraysAreEqualLength = require('./testHelpers').arraysAreEqualLength;
 const blockIt = require('../blockIt').blockIt;
 const stallIt = require('../blockIt').stallIt;
 const paceIt = require('../blockIt').paceIt;
@@ -8,7 +10,7 @@ const paceIt = require('../blockIt').paceIt;
 const testArr = [...new Array(300).keys()];
 
 test('blockIt performs in order with Promises', function (next) {
-  blockIt(testFuncPromiseReturn, testArr)
+  blockIt(testFuncReturnPromise, testArr)
     .then(function (result) {
       ok(arraysAreEqual(result, testArr), 'Promises are performed in order and block until resolved.');
       next();
@@ -16,7 +18,7 @@ test('blockIt performs in order with Promises', function (next) {
 }, true);
 
 test('blockIt performs with non-Promises', function (next) {
-  blockIt(testFuncNonPromiseReturn, testArr)
+  blockIt(testFuncReturnNonPromise, testArr)
     .then(function (result) {
       ok(arraysAreEqual(result, testArr), 'Functions are performed in order.');
       next();
@@ -24,50 +26,52 @@ test('blockIt performs with non-Promises', function (next) {
 }, true);
 
 test('stallIt stalls', function (next) {
-  stallIt(testFuncPromiseReturn, testArr, 5)
+  const interval = 5;
+  stallIt(testFuncReturnExecutionTime, testArr, interval)
     .then(function (result) {
-      ok(arraysAreEqualLength(result, testArr), 'Each task is stalled the provided amount.');
+      ok(arraysAreEqualLength(result, testArr), 'stallIt operates on all inputs.');
+      ok(stepDifferencesAreWithinInterval(result, interval), 'Stalls between function invocations');
       next();
     });
 }, true);
 
 test('paceIt paces', function (next) {
-  paceIt(testFuncPromiseReturn, testArr, 50)
+  paceIt(testFuncReturnPromise, testArr, 50)
     .then(function (result) {
       ok(arraysAreEqualLength(result, testArr), 'Tasks are paced at the provided amount.');
+      // ok(stepDifferencesAreWithinInterval(result, interval), 'Paces between function invocations'); // todo: this.
       next();
     })
 }, true);
 
+function stepDifferencesAreWithinInterval(results, interval) {
+  const permissableOffsetInMilliseconds = 100;
+  const maxDifference = interval + permissableOffsetInMilliseconds;
+  const minDifference = interval - permissableOffsetInMilliseconds;
+
+  return results.every((completedTime, index) => {
+    if (index === 0) {
+      return true;
+    }
+    const previousCompletedTime = results[index - 1];
+    const completionDifference = completedTime - previousCompletedTime;
+    return completionDifference >= minDifference && completionDifference <= maxDifference;
+  });
+}
+
 // Random timeout to simulate a poor man's async process
-function testFuncPromiseReturn(index) {
+function testFuncReturnPromise(index) {
   return new Promise(function (resolve) {
     setTimeout(() => resolve(index), Math.random() * 10);
   });
 }
 
-function testFuncNonPromiseReturn(index) {
+function testFuncReturnNonPromise(index) {
   return index;
 }
 
-function arraysAreEqualLength(arr1, arr2) {
-  return arr1.length === arr2.length;
-}
-
-function arraysAreEqualContents(arr1, arr2) {
-  return arr1.every((val, idx) => val === arr2[idx]);
-}
-
-function arraysAreEqual(arr1, arr2) {
-  if (!arraysAreEqualLength(arr1, arr2)) {
-    console.error('Arrays are not equal length.');
-    return false;
-  }
-
-  if (!arraysAreEqualContents(arr1, arr2)) {
-    console.error('Arrays are not equal contents.');
-    return false;
-  }
-
-  return true;
+function testFuncReturnExecutionTime() {
+  return new Promise(function (resolve) {
+    setTimeout(() => resolve(Date.now()));
+  });
 }
