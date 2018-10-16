@@ -36,10 +36,11 @@ test('stallIt stalls', function (next) {
 }, true);
 
 test('paceIt paces', function (next) {
-  paceIt(testFuncReturnPromise, testArr, 50)
+  const executionsPerSecond = 50;
+  paceIt(testFuncReturnExecutionTime, testArr, executionsPerSecond)
     .then(function (result) {
       ok(arraysAreEqualLength(result, testArr), 'Tasks are paced at the provided amount.');
-      // ok(stepDifferencesAreWithinInterval(result, interval), 'Paces between function invocations'); // todo: this.
+      ok(groupingsAreExecutedPerSecond(result, executionsPerSecond), 'Paces between function invocations');
       next();
     })
 }, true);
@@ -49,13 +50,34 @@ function stepDifferencesAreWithinInterval(results, interval) {
   const maxDifference = interval + permissableOffsetInMilliseconds;
   const minDifference = interval - permissableOffsetInMilliseconds;
 
-  return results.every((completedTime, index) => {
+  return results.every((completionTime, index) => {
     if (index === 0) {
       return true;
     }
-    const previousCompletedTime = results[index - 1];
-    const completionDifference = completedTime - previousCompletedTime;
+    const previousCompletionTime = results[index - 1];
+    const completionDifference = completionTime - previousCompletionTime;
     return completionDifference >= minDifference && completionDifference <= maxDifference;
+  });
+}
+
+function groupingsAreExecutedPerSecond(results, executionsPerSecond) {
+  const permissableOffsetInMilliseconds = 100;
+  let groupingTime;
+  let previousGroupingStartTime;
+  return results.every((completionTime, index) => {
+    if (index < executionsPerSecond) {
+      return true;
+    }
+
+    if (index % executionsPerSecond === 0) {
+      groupingTime = completionTime;
+      previousGroupingStartTime = index === 0 ? 0 : results[index - executionsPerSecond];
+    }
+
+    const maxGroupingTimeWithinSecond = groupingTime + 1000;
+    const completionTimeIsWithinGroupingBoundary = completionTime >= groupingTime && completionTime <= maxGroupingTimeWithinSecond;
+    const completionTimeIsWithinNextSecond = completionTime + permissableOffsetInMilliseconds >= previousGroupingStartTime + 1000;
+    return completionTimeIsWithinGroupingBoundary && completionTimeIsWithinNextSecond;
   });
 }
 
