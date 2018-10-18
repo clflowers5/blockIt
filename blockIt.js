@@ -1,5 +1,3 @@
-'use strict';
-
 function isFunction(func) {
   return typeof func === 'function';
 }
@@ -17,64 +15,61 @@ function isPromise(func) {
 function promisify(value) {
   if (isPromise(value)) {
     return value;
-  } else {
-    return new Promise(function (resolve) {
-      resolve(value);
-    });
   }
+  return new Promise((resolve) => {
+    resolve(value);
+  });
 }
 
 module.exports = {
-  blockIt: function (func, arr) {
-    return new Promise(function (resolve) {
+  blockIt(func, arr) {
+    return new Promise((resolve) => {
       const result = [];
       const len = arr.length;
       let complete = 0;
 
       validateFunction(func);
-      arr.reduce(function (promise, item) {
-        return promise
-          .then(function () {
-            const functionReturn = func(item);
-            return promisify(functionReturn)
-              .then(function (data) {
-                result.push(data);
-                if (++complete === len) resolve(result);
-              });
-          });
-      }, Promise.resolve());
+      arr.reduce((promise, item) => promise
+        .then(() => {
+          const functionReturn = func(item);
+          return promisify(functionReturn)
+            .then((data) => {
+              result.push(data);
+              complete += 1;
+              if (complete === len) resolve(result);
+            });
+        }), Promise.resolve());
     });
   },
 
-  stallIt: function (func, arr, interval) {
+  stallIt(func, arr, interval) {
     validateFunction(func);
-    return new Promise(function (resolve) {
-      let result = [];
+    return new Promise((resolve) => {
+      const result = [];
       let complete = 0;
-      let len = arr.length;
+      const len = arr.length;
 
-      arr.map(function (item, index) {
-        (function (item) {
-          setTimeout(function () {
-            func(item)
-              .then(function (data) {
-                result.push(data);
-                if (++complete === len) resolve(result);
-              });
-          }, interval * index);
-        })(item);
+      arr.forEach((item, index) => {
+        setTimeout(() => {
+          func(item)
+            .then((data) => {
+              result.push(data);
+              complete += 1;
+              if (complete === len) resolve(result);
+            });
+        }, interval * index);
       });
     });
   },
 
-  paceIt: function (func, arr, perSecond) {
-    let interval = 1000 / perSecond;
+  paceIt(func, arr, perSecond) {
+    const interval = 1000 / perSecond;
     validateFunction(func);
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
       module.exports.stallIt(func, arr, interval)
-        .then(function (result) {
-          resolve(result)
+        .then((result) => {
+          resolve(result);
         });
     });
-  }
+  },
 };

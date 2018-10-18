@@ -58,8 +58,5 @@ paceIt(awesomeFunction, awesomeArr, 20)
 ```
 ### TODO:
 * handle errors that occur within callback invocation
-* add tests for time delays in stallIt and paceIt - in progress
 * bring in babel safe transpilation
 * setup proper 'main' for package.json (after babel)
-* super simple eslint config.
-* replace klud for testing?

@@ -4,12 +4,17 @@
   "description": "Provides functions to manage Promise execution. Provides blocking, stalling, and pacing execution of a callback function to an array of elements",
   "main": "blockIt.js",
   "scripts": {
-    "test": "node test/blockItSpec.js"
+    "test": "node test/blockItSpec.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "author": "Chris Flowers",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "kludjs": "^1.0.0"
   },
   "repository": {
